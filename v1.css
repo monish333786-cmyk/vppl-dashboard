@@ -1,0 +1,72 @@
+/* v1 - draft-mark tiles */
+/* ---------- stat strips ---------- */
+.strip{ margin-bottom:22px; }
+.strip-label{
+  margin:0 0 10px; font-size:10.5px; font-weight:650; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.stats{ display:grid; grid-template-columns:repeat(auto-fit, minmax(156px,1fr)); gap:12px; }
+@media (max-width:760px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+
+/* Each tile is a draft mark: shaded water rises to the share this group holds, with a
+   line drawn at the waterline. The fill, the number and the share all say one thing. */
+.stat{
+  position:relative; overflow:hidden; isolation:isolate;
+  background:var(--surface); border:1px solid var(--rule); border-radius:14px;
+  padding:14px 16px 15px; box-shadow:var(--shadow);
+  display:block; width:100%; text-align:left; font:inherit; color:inherit; cursor:pointer;
+  transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.stat .fill{
+  position:absolute; left:0; right:0; bottom:0; z-index:0;
+  background:var(--tile-color, var(--accent)); opacity:.12;
+  transition:height .4s cubic-bezier(.4,0,.2,1), opacity .15s ease;
+}
+.stat .mark{
+  position:absolute; left:0; right:0; height:2px; z-index:0;
+  background:var(--tile-color, var(--accent)); opacity:.38;
+  transition:bottom .4s cubic-bezier(.4,0,.2,1);
+}
+.stat .s-label, .stat .s-value, .stat .s-share{ position:relative; z-index:1; }
+.stat:hover{ border-color:var(--tile-color, var(--accent)); transform:translateY(-1px); }
+.stat:hover .fill{ opacity:.19; }
+.stat:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.stat.is-active{
+  border-color:var(--tile-color, var(--accent));
+  box-shadow:0 0 0 3px var(--accent-soft), var(--shadow);
+}
+.stat.flagged{ border-color:rgba(208,59,59,0.40); }
+
+.stat .s-label{
+  display:flex; align-items:center; gap:7px; margin-bottom:10px;
+  font-size:10.5px; font-weight:650; letter-spacing:0.09em; text-transform:uppercase;
+  color:var(--ink-2);
+}
+.stat .s-dot{ width:9px; height:9px; border-radius:50%; flex:none; }
+.stat .s-label .meter{ height:12px; }
+.stat .s-value{
+  font-size:30px; font-weight:650; letter-spacing:-0.025em; line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.stat .s-share{ margin-top:7px; font-size:11px; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.stat.is-empty .s-value{ color:var(--ink-3); }
+
+/* The headline tile is the deep-water one, with the wave rule running under it. */
+.stat.lead{
+  background:linear-gradient(155deg, var(--masthead) 0%, var(--masthead-2) 100%);
+  border-color:transparent; color:#fff;
+}
+.stat.lead .s-label{ color:var(--ink-on-deep-2); }
+.stat.lead .s-value{ color:#fff; }
+.stat.lead .s-share{ color:var(--ink-on-deep-2); }
+.stat.lead::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:4px; z-index:0;
+  background:repeating-linear-gradient(90deg,
+    var(--brand-blue) 0 10px, rgba(255,255,255,0.14) 10px 20px);
+}
+.stat.lead:hover{ transform:translateY(-1px); filter:brightness(1.10); }
+
+@media (prefers-reduced-motion: reduce){
+  .stat, .stat .fill, .stat .mark{ transition:none; }
+  .stat:hover, .stat.lead:hover{ transform:none; }
+}

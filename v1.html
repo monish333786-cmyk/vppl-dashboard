@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VPPL Dashboard</title>
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="v1.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="shell">
+    <div class="masthead-inner">
+      <div class="brand">
+        <span class="logo-chip"><img src="logo.png" alt="Vadhvan Port"></span>
+        <div>
+          <p class="eyebrow">Vadhvan Port &middot; Action Tracker</p>
+          <h1>VPPL Dashboard</h1>
+          <p>Key action items across workstreams, owners and timelines</p>
+        </div>
+      </div>
+      <div class="masthead-tools">
+        <span class="pill" id="statusPill"><span class="dot" id="statusDot"></span><span id="statusText">Loading&hellip;</span></span>
+        <button class="ghost" id="btnLive" hidden>Use my live file</button>
+        <label class="ghost" id="lblLoadCopy" for="filePicker" hidden>Load my copy&hellip;</label>
+        <input type="file" id="filePicker" accept=".xlsx" style="display:none;">
+        <button class="ghost" id="btnRefresh" hidden>Refresh</button>
+        <button class="ghost" id="btnTheme" title="Switch light or dark">&#9680;</button>
+      </div>
+    </div>
+    <div class="sounding" aria-hidden="true"></div>
+  </div>
+</header>
+
+<main class="shell">
+
+  <div class="banner" id="banner" role="status"><span id="bannerText"></span></div>
+
+  <div class="boot-warning" id="bootWarning">
+    <strong>The dashboard scripts did not run.</strong>
+    If this message is still showing, the page's JavaScript was blocked or failed to load. Check that
+    styles.css, xlsx.full.min.js, snapshot.js and app.js all sit alongside index.html on the server;
+    the browser console will name the file it could not run.
+  </div>
+
+  <div id="dash" hidden>
+
+    <div class="toolbar" id="toolbar">
+      <button class="tb-reset" id="btnReset">Reset filters</button>
+      <span class="tb-count" id="resultCount"></span>
+    </div>
+
+    <section class="strip" aria-label="Summary by status">
+      <p class="strip-label">By status</p>
+      <div class="stats" id="stats" data-style="tiles"></div>
+    </section>
+
+    <section class="strip" aria-label="Summary by priority">
+      <p class="strip-label">By priority</p>
+      <div class="stats" id="priorityStats" data-style="tiles"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>Action items by workstream</h2>
+          <p class="sub">Each bar is one workstream, divided by status. Click a segment or a name to filter everything below.</p>
+        </div>
+      </div>
+      <div class="bars" id="bars"></div>
+      <div class="legend" id="statusLegend"></div>
+    </section>
+
+    <section class="card" id="priorityCard" hidden>
+      <div class="card-head">
+        <div>
+          <h2>Priority</h2>
+          <p class="sub">Taller bars mean higher priority, the way deeper soundings read on a chart. Click to filter.</p>
+        </div>
+        <div class="pri-legend" id="priorityLegend"></div>
+      </div>
+      <div class="bars" id="priorityBars"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2>All action items</h2>
+          <p class="sub" id="tableSub"></p>
+          <p class="sub">Grouped by workstream, then sub-workstream. Click any column heading to sort.</p>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <colgroup>
+            <col style="width:14%"><col style="width:11%"><col style="width:19%"><col style="width:8.5%">
+            <col style="width:9.5%"><col style="width:7.5%"><col style="width:7%"><col style="width:23.5%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col" data-key="workstream">Workstream</th>
+              <th scope="col" data-key="subWorkstream">Sub-Workstream</th>
+              <th scope="col" data-key="actionItem">Action Item</th>
+              <th scope="col" data-key="owner">Owner</th>
+              <th scope="col" data-key="status">Status</th>
+              <th scope="col" data-key="priority">Priority</th>
+              <th scope="col" data-key="timeline">Timeline</th>
+              <th scope="col" data-key="remarks">Remarks</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Source: <code>Key Meeting Tracker.xlsx</code>, sheet <code>Dashboard</code>. Delayed items are marked in red.
+      The stamp at the top right shows when the tracker was last saved. If you have the workbook on this
+      machine you can point the page at your own copy for live figures &mdash; the file is read in your
+      browser and nothing is uploaded.
+    </footer>
+
+  </div>
+</main>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="snapshot.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
